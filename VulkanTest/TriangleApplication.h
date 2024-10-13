@@ -80,7 +80,7 @@ private:
 	//创建图像视图
 	void createImageViews();
 	//简化创建
-	VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+	VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels);
 
 	//创建图形管线
 	void createGraphicsPipeline();
@@ -157,12 +157,12 @@ private:
 	void createTextureImage();
 
 	//简化图像对象的操作
-	void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling,
+	void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling,
 					 VkImageUsageFlagBits usage, VkMemoryPropertyFlags properties,
 					 VkImage& image, VkDeviceMemory& imageMemory);
 
 	//进行图像布局变换
-	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
 
 	//复制缓冲到图像
 	void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
@@ -183,6 +183,9 @@ private:
 
 	//加载模型
 	void loadModel();
+
+	//生成原石纹理图像不同细化级别
+	void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels);
 private:
 	//窗口句柄
 	GLFWwindow* window;
@@ -271,6 +274,8 @@ private:
 	VkDescriptorPool descriptorPool;
 	std::vector<VkDescriptorSet> descriptorSets;
 
+	//存储计算出的细化级别个数
+	uint32_t mipLevels;
 	//使用Vulkan的图像
 	VkImage textureImage;
 	VkDeviceMemory textureImageMemory;
@@ -283,4 +288,5 @@ private:
 	VkImage depthImage;
 	VkDeviceMemory depthImageMemory;
 	VkImageView depthImageView;
+	
 };
