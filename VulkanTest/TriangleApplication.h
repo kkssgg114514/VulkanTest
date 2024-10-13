@@ -157,7 +157,8 @@ private:
 	void createTextureImage();
 
 	//简化图像对象的操作
-	void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling,
+	void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples,
+					 VkFormat format, VkImageTiling tiling,
 					 VkImageUsageFlagBits usage, VkMemoryPropertyFlags properties,
 					 VkImage& image, VkDeviceMemory& imageMemory);
 
@@ -186,6 +187,13 @@ private:
 
 	//生成原石纹理图像不同细化级别
 	void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels);
+
+	//查询可用采样数
+	VkSampleCountFlagBits getMaxUsableSampleCount();
+
+	//
+	void createColorResources();
+
 private:
 	//窗口句柄
 	GLFWwindow* window;
@@ -288,5 +296,12 @@ private:
 	VkImage depthImage;
 	VkDeviceMemory depthImageMemory;
 	VkImageView depthImageView;
+
+	//存储多重采样的最大可用样本数
+	VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
+
+	VkImage colorImage;
+	VkDeviceMemory colorImageMemory;
+	VkImageView colorImageView;
 	
 };
